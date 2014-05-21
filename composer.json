@@ -1,0 +1,24 @@
+{
+    "name": "maniaplanet/manialib-xml",
+    "type": "library",
+    "description": "Object-oriented fluent PHP library for generating XML",
+    "keywords": ["XML"],
+    "license": "MIT",
+    "homepage": "https://github.com/maniaplanet/manialib-xml",
+    "authors": [
+        {
+            "name": "Nadeo",
+            "email": "contact@nadeo.com",
+            "homepage": "http://www.nadeo.com/"
+        }
+    ],
+    "support": {
+        "forum": "https://github.com/maniaplanet/manialib-xml/issues"
+    },
+    "require": {
+        "php": ">=5.3"
+    },
+    "autoload": {
+        "psr-4": {"ManiaLib\\": "src/ManiaLib/"}
+    }
+}
