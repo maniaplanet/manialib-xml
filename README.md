@@ -3,10 +3,10 @@ ManiaLib\XML
 
 ManiaLib\XML is an object-oriented PHP library for generating XML.
 
-Work in progress 
+Requirements
 -----------------------------
 
-Please beware this is a wip lib. We might break stuff at any time. But it is also the time to ask for features to be considered!
+ * PHP 5.3+
 
 Installation
 -----------------------------
@@ -53,6 +53,8 @@ abstract class Node
 Todo
 -----------------------------
  * XMLComment
- * Doc
  * Code example
+ * Best practices
+ * Doc
+ 
 
