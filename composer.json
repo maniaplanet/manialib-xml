@@ -20,5 +20,8 @@
     },
     "autoload": {
         "psr-4": {"ManiaLib\\": "src/ManiaLib/"}
+    },
+     "archive": {
+        "exclude": ["/example.php"]
     }
 }
