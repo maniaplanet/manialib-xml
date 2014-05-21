@@ -50,12 +50,48 @@ abstract class Node
 ```
  * Actual XML rendering is done by an implementation of `ManiaLib\XML\Rendering\RendererInterface` (see examples for usage).
 
+Example
+-----------------------------
+
+```
+<?php
+
+use ManiaLib\XML\Node;
+use ManiaLib\XML\Rendering\Drivers\XMLWriterDriver;
+use ManiaLib\XML\Rendering\Renderer;
+
+require_once 'vendor/autoload.php';
+
+$root = Node::create()
+	->setNodeName('rootElement')
+	->setAttribute('rootAttrivute', '1.0');
+
+Node::create()
+	->setNodeName('someElement')
+	->setAttribute('someAttribute', 'foo')
+	->setAttribute('otherAttribute', 'bar')
+	->setNodeValue('Hello world')
+	->appendTo($root);
+
+$root->appendChild(Node::create()->setNodeName('anotherOne'));
+
+$renderer = new Renderer();
+$renderer->setDriver(new XMLWriterDriver());
+$renderer->setRoot($root);
+echo $renderer->getXML();
+```
+
+It will output:
+
+```
+<?xml version="1.0" encoding="UTF-8"?>
+<rootElement rootAttrivute="1.0"><someElement>Hello world</someElement><anotherOne/></rootElement>
+```
+
 Todo
 -----------------------------
  * XMLComment
- * Code example
- * Best practices
- * Doc
+ * PhpDoc
  
 
 
