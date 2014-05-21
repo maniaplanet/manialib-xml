@@ -1,7 +1,7 @@
 {
     "name": "maniaplanet/manialib-xml",
     "type": "library",
-    "description": "Object-oriented PHP library for generating XML",
+    "description": "Object-oriented PHP library for writing XML.",
     "keywords": ["XML"],
     "license": "MIT",
     "homepage": "https://github.com/maniaplanet/manialib-xml",

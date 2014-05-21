@@ -1,7 +1,7 @@
 ManiaLib\XML
 ===================================================
 
-ManiaLib\XML is an object-oriented PHP library for generating XML.
+ManiaLib\XML is an object-oriented PHP library for writing XML.
 
 Requirements
 -----------------------------
