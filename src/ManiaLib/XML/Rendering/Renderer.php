@@ -4,7 +4,6 @@ namespace ManiaLib\XML\Rendering;
 
 use ManiaLib\XML\Exception;
 use ManiaLib\XML\Node;
-use ManiaLib\XML\Rendering\Drivers\DOMDocumentDriver;
 
 class Renderer
 {
@@ -18,11 +17,6 @@ class Renderer
 	 * @var DriverInterface
 	 */
 	protected $driver;
-
-	function __construct()
-	{
-		$this->driver = new DOMDocumentDriver();
-	}
 
 	function setRoot(Node $node)
 	{
