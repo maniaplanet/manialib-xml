@@ -2,7 +2,7 @@
 
 namespace ManiaLib\XML\Rendering\Drivers;
 
-use ManiaLib\XML\Fragment;
+use ManiaLib\XML\FragmentInterface;
 use ManiaLib\XML\NodeInterface;
 use ManiaLib\XML\Rendering\DriverInterface;
 use ManiaLib\XML\Rendering\Events;
@@ -51,7 +51,7 @@ class XMLWriterDriver implements DriverInterface
 		$this->eventDispatcher->dispatch(Events::preRender($node));
 
 		// XML fragment?
-		if($node instanceof Fragment)
+		if($node instanceof FragmentInterface)
 		{
 			return $this->appendXML($node->getNodeValue());
 		}

@@ -3,7 +3,7 @@
 namespace ManiaLib\XML\Rendering\Drivers;
 
 use DOMDocument;
-use ManiaLib\XML\Fragment;
+use ManiaLib\XML\FragmentInterface;
 use ManiaLib\XML\NodeInterface;
 use ManiaLib\XML\Rendering\DriverInterface;
 use ManiaLib\XML\Rendering\Events;
@@ -16,7 +16,7 @@ class DOMDocumentDriver implements DriverInterface
 	 * @var DOMDocument
 	 */
 	protected $document;
-	
+
 	/**
 	 * @var EventDispatcherInterface 
 	 */
@@ -26,7 +26,7 @@ class DOMDocumentDriver implements DriverInterface
 	{
 		$this->document = new DOMDocument('1.0', 'UTF-8');
 	}
-	
+
 	public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
 	{
 		$this->eventDispatcher = $eventDispatcher;
@@ -50,7 +50,7 @@ class DOMDocumentDriver implements DriverInterface
 		$this->eventDispatcher->dispatch(Events::preRender($node));
 
 		// XML fragment?
-		if($node instanceof Fragment)
+		if($node instanceof FragmentInterface)
 		{
 			return $this->appendXML($node->getNodeValue());
 		}
