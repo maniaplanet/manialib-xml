@@ -2,19 +2,23 @@
 
 namespace ManiaLib\XML\Rendering;
 
+use ManiaLib\XML\NodeInterface;
+
 abstract class Events
 {
 
 	const ADD_SUBSCRIBER = 'manialib.xml.rendering.add_subscriber';
-	
-	static public function preCreate(\ManiaLib\XML\NodeInterface $node)
+	const PRE_RENDER = 'manialib.xml.rendering.pre_render';
+	const POST_RENDER = 'manialib.xml.rendering.post_render';
+
+	static public function preCreate(NodeInterface $node)
 	{
-		return 'manialib.xml.rendering.'.spl_object_hash($node).'pre_create';
+		return 'manialib.xml.rendering.'.spl_object_hash($node).'.pre_create';
 	}
 
-	static public function postCreate(\ManiaLib\XML\NodeInterface $node)
+	static public function postCreate(NodeInterface $node)
 	{
-		return 'manialib.xml.rendering.'.spl_object_hash($node).'post_create';
+		return 'manialib.xml.rendering.'.spl_object_hash($node).'.post_create';
 	}
 
 }

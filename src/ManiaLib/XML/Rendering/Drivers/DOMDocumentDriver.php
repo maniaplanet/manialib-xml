@@ -4,7 +4,9 @@ namespace ManiaLib\XML\Rendering\Drivers;
 
 use DOMDocument;
 use ManiaLib\XML\Fragment;
+use ManiaLib\XML\NodeInterface;
 use ManiaLib\XML\Rendering\DriverInterface;
+use ManiaLib\XML\Rendering\Events;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class DOMDocumentDriver implements DriverInterface
@@ -14,6 +16,11 @@ class DOMDocumentDriver implements DriverInterface
 	 * @var DOMDocument
 	 */
 	protected $document;
+	
+	/**
+	 * @var EventDispatcherInterface 
+	 */
+	protected $eventDispatcher;
 
 	function __construct()
 	{
@@ -27,8 +34,11 @@ class DOMDocumentDriver implements DriverInterface
 
 	function getXML(NodeInterface $root)
 	{
+		$this->eventDispatcher->dispatch(Events::PRE_RENDER);
 		$this->document->appendChild($this->getElement($root));
-		return $this->document->saveXML();
+		$xml = $this->document->saveXML();
+		$this->eventDispatcher->dispatch(Events::POST_RENDER);
+		return $xml;
 	}
 
 	function appendXML($xml)
@@ -41,6 +51,7 @@ class DOMDocumentDriver implements DriverInterface
 	protected function getElement(NodeInterface $node)
 	{
 		$this->eventDispatcher->addSubscriber($node);
+		$this->eventDispatcher->dispatch(Events::ADD_SUBSCRIBER);
 		$this->eventDispatcher->dispatch(Events::preCreate($node));
 
 		// XML fragment?

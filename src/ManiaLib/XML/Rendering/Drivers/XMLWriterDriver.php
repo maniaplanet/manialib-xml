@@ -36,9 +36,12 @@ class XMLWriterDriver implements DriverInterface
 
 	function getXML(NodeInterface $root)
 	{
+		$this->eventDispatcher->dispatch(Events::PRE_RENDER);
 		$this->getElement($root);
 		$this->writer->endDocument();
-		return $this->writer->outputMemory(true);
+		$xml = $this->writer->outputMemory(true);
+		$this->eventDispatcher->dispatch(Events::POST_RENDER);
+		return $xml;
 	}
 
 	function appendXML($xml)
