@@ -21,8 +21,5 @@
     },
     "autoload": {
         "psr-4": {"ManiaLib\\": "src/ManiaLib/"}
-    },
-     "archive": {
-        "exclude": ["/examples"]
     }
 }
