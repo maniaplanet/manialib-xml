@@ -2,20 +2,22 @@
 
 namespace ManiaLib\XML\Rendering\Drivers;
 
+use ManiaLib\XML\Fragment;
 use ManiaLib\XML\Node;
 use ManiaLib\XML\Rendering\DriverInterface;
+use XMLWriter;
 
 class XMLWriterDriver implements DriverInterface
 {
 
 	/**
-	 * @var \XMLWriter
+	 * @var XMLWriter
 	 */
 	protected $writer;
 
 	function __construct()
 	{
-		$this->writer = new \XMLWriter();
+		$this->writer = new XMLWriter();
 		$this->writer->openMemory();
 		$this->writer->startDocument('1.0', 'UTF-8');
 	}
@@ -35,7 +37,7 @@ class XMLWriterDriver implements DriverInterface
 	protected function getElement(Node $node)
 	{
 		// XML fragment?
-		if($node instanceof \ManiaLib\XML\Fragment)
+		if($node instanceof Fragment)
 		{
 			return $this->appendXML($node->getNodeValue());
 		}
@@ -46,16 +48,18 @@ class XMLWriterDriver implements DriverInterface
 		// Create
 		$this->writer->startElement($node->getNodeName());
 
-		// Value
-		if($node->getNodeValue() !== null)
-		{
-			$this->writer->writeRaw(htmlspecialchars($node->getNodeValue(), ENT_NOQUOTES, 'UTF-8'));
-		}
-
 		// Attributes
+		// With XMLWriter, attributes must be written prior to content and children
+		// See http://www.php.net/manual/en/function.xmlwriter-write-attribute.php#103498
 		foreach($node->getAttributes() as $name => $value)
 		{
 			$this->writer->writeAttribute($name, $value);
+		}
+		
+		// Value
+		if($node->getNodeValue() !== null)
+		{
+			$this->writer->text($node->getNodeValue());
 		}
 
 		// Children
