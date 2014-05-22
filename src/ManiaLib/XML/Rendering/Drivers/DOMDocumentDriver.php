@@ -1,10 +1,12 @@
 <?php
 
+namespace ManiaLib\XML\Rendering\Drivers;
+
+use DOMDocument;
 use ManiaLib\XML\Fragment;
 use ManiaLib\XML\Node;
 use ManiaLib\XML\Rendering\DriverInterface;
-
-namespace ManiaLib\XML\Rendering\Drivers;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class DOMDocumentDriver implements DriverInterface
 {
@@ -17,6 +19,11 @@ class DOMDocumentDriver implements DriverInterface
 	function __construct()
 	{
 		$this->document = new DOMDocument('1.0', 'UTF-8');
+	}
+	
+	public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
+	{
+		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	function getXML(Node $root)

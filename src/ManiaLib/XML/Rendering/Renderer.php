@@ -18,15 +18,17 @@ class Renderer implements RendererInterface
 	 * @var DriverInterface
 	 */
 	protected $driver;
+	
+	/**
+	 * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+	 */
+	protected $eventDispatcher;
 
 	function setRoot(Node $node)
 	{
 		$this->root = $node;
 	}
 
-	/**
-	 * @return DriverInterface
-	 */
 	public function getRoot()
 	{
 		return $this->root;
@@ -37,16 +39,29 @@ class Renderer implements RendererInterface
 		$this->driver = $driver;
 	}
 
-	/**
-	 * @return DriverInterface
-	 */
 	function getDriver()
 	{
 		if(!$this->driver)
 		{
-			$this->setDriver(new XMLWriterDriver());
+			$driver = new XMLWriterDriver();
+			$driver->setEventDispatcher($this->getEventDispatcher());
+			$this->setDriver($driver);
 		}
 		return $this->driver;
+	}
+
+	public function setEventDispatcher(\Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher)
+	{
+		$this->eventDispatcher = $eventDispatcher;
+	}
+	
+	public function getEventDispatcher()
+	{
+		if(!$this->eventDispatcher)
+		{
+			$this->setEventDispatcher(new \Symfony\Component\EventDispatcher\EventDispatcher());
+		}
+		return $this->eventDispatcher;
 	}
 
 	function getXML()

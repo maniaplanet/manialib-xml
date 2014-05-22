@@ -5,6 +5,7 @@ namespace ManiaLib\XML\Rendering\Drivers;
 use ManiaLib\XML\Fragment;
 use ManiaLib\XML\Node;
 use ManiaLib\XML\Rendering\DriverInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use XMLWriter;
 
 class XMLWriterDriver implements DriverInterface
@@ -20,6 +21,11 @@ class XMLWriterDriver implements DriverInterface
 		$this->writer = new XMLWriter();
 		$this->writer->openMemory();
 		$this->writer->startDocument('1.0', 'UTF-8');
+	}
+	
+	public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
+	{
+		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	function getXML(Node $root)
