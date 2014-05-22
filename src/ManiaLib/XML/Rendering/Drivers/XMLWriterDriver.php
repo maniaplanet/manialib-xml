@@ -48,7 +48,7 @@ class XMLWriterDriver implements DriverInterface
 
 	protected function getElement(NodeInterface $node)
 	{
-		$this->eventDispatcher->dispatch(Events::preCreate($node));
+		$this->eventDispatcher->dispatch(Events::preRender($node));
 
 		// XML fragment?
 		if($node instanceof Fragment)
@@ -82,7 +82,7 @@ class XMLWriterDriver implements DriverInterface
 		// End create
 		$this->writer->endElement();
 
-		$this->eventDispatcher->dispatch(Events::postCreate($node));
+		$this->eventDispatcher->dispatch(Events::postRender($node));
 	}
 
 }

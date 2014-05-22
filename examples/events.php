@@ -26,7 +26,7 @@ class MyCustomNode extends Node
 		
 		// But also some events related to the current instance.
 		// ManiaLib\XML\Rendering\Events provides shortcuts to generate instance-related event names
-		$dispatcher->addListener(Events::preCreate($this), array($this, 'preCreate'));
+		$dispatcher->addListener(Events::preRender($this), array($this, 'preRender'));
 		
 		// Full documetation of Event Dispatcher at
 		// http://symfony.com/doc/current/components/event_dispatcher/index.html
@@ -38,7 +38,7 @@ class MyCustomNode extends Node
 		$this->setAttribute('foo', 'bar');
 	}
 	
-	function preCreate()
+	function preRender()
 	{
 		// This is called before the XML element related to this instance is created
 		$this->setAttribute('hello', 'world');

@@ -47,7 +47,7 @@ class DOMDocumentDriver implements DriverInterface
 
 	protected function getElement(NodeInterface $node)
 	{
-		$this->eventDispatcher->dispatch(Events::preCreate($node));
+		$this->eventDispatcher->dispatch(Events::preRender($node));
 
 		// XML fragment?
 		if($node instanceof Fragment)
@@ -77,7 +77,7 @@ class DOMDocumentDriver implements DriverInterface
 			$element->appendChild($subelement);
 		}
 
-		$this->eventDispatcher->dispatch(Events::postCreate($node));
+		$this->eventDispatcher->dispatch(Events::postRender($node));
 
 		return $element;
 	}
