@@ -49,8 +49,8 @@ class Node implements NodeInterface
 	public static function getSubscribedEvents()
 	{
 		return array(
-			Events::ADD_SUBSCRIBER => array(
-				'onAddSubscriber'
+			Events::ADD_SUBSCRIBERS => array(
+				'onAddSubscribers'
 			)
 		);
 	}
@@ -194,11 +194,15 @@ class Node implements NodeInterface
 		return $this;
 	}
 
-	function onAddSubscriber(Event $event, $eventName, EventDispatcherInterface $dispatcher)
+	function onAddSubscribers(Event $event, $eventName, EventDispatcherInterface $dispatcher)
 	{
 		if(!$this->listenersRegistered)
 		{
 			$this->registerListeners($dispatcher);
+			foreach($this->children as $child)
+			{
+				$dispatcher->addSubscriber($child);
+			}
 			$this->listenersRegistered = true;
 		}
 	}

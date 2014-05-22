@@ -36,12 +36,9 @@ class XMLWriterDriver implements DriverInterface
 
 	function getXML(NodeInterface $root)
 	{
-		$this->eventDispatcher->dispatch(Events::PRE_RENDER);
 		$this->getElement($root);
 		$this->writer->endDocument();
-		$xml = $this->writer->outputMemory(true);
-		$this->eventDispatcher->dispatch(Events::POST_RENDER);
-		return $xml;
+		return $this->writer->outputMemory(true);
 	}
 
 	function appendXML($xml)
@@ -51,8 +48,6 @@ class XMLWriterDriver implements DriverInterface
 
 	protected function getElement(NodeInterface $node)
 	{
-		$this->eventDispatcher->addSubscriber($node);
-		$this->eventDispatcher->dispatch(Events::ADD_SUBSCRIBER);
 		$this->eventDispatcher->dispatch(Events::preCreate($node));
 
 		// XML fragment?

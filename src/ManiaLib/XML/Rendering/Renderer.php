@@ -70,7 +70,15 @@ class Renderer implements RendererInterface
 		{
 			throw new Exception('No ManiaLib\XML\NodeInterface root found.');
 		}
-		return $this->getDriver()->getXML($this->root);
+		
+		$this->getEventDispatcher()->addSubscriber($this->root);
+		$this->getEventDispatcher()->dispatch(Events::ADD_SUBSCRIBERS);
+		
+		
+		$this->getEventDispatcher()->dispatch(Events::PRE_RENDER);
+		$xml = $this->getDriver()->getXML($this->root);
+		$this->getEventDispatcher()->dispatch(Events::POST_RENDER);
+		return $xml;
 	}
 
 }

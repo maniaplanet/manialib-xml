@@ -34,11 +34,8 @@ class DOMDocumentDriver implements DriverInterface
 
 	function getXML(NodeInterface $root)
 	{
-		$this->eventDispatcher->dispatch(Events::PRE_RENDER);
 		$this->document->appendChild($this->getElement($root));
-		$xml = $this->document->saveXML();
-		$this->eventDispatcher->dispatch(Events::POST_RENDER);
-		return $xml;
+		return $this->document->saveXML();
 	}
 
 	function appendXML($xml)
@@ -50,8 +47,6 @@ class DOMDocumentDriver implements DriverInterface
 
 	protected function getElement(NodeInterface $node)
 	{
-		$this->eventDispatcher->addSubscriber($node);
-		$this->eventDispatcher->dispatch(Events::ADD_SUBSCRIBER);
 		$this->eventDispatcher->dispatch(Events::preCreate($node));
 
 		// XML fragment?

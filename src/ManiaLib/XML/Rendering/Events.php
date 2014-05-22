@@ -7,7 +7,7 @@ use ManiaLib\XML\NodeInterface;
 abstract class Events
 {
 
-	const ADD_SUBSCRIBER = 'manialib.xml.rendering.add_subscriber';
+	const ADD_SUBSCRIBERS = 'manialib.xml.rendering.add_subscribers';
 	const PRE_RENDER = 'manialib.xml.rendering.pre_render';
 	const POST_RENDER = 'manialib.xml.rendering.post_render';
 
