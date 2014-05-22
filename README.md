@@ -6,11 +6,6 @@ ManiaLib\XML
 
 ManiaLib\XML is an object-oriented PHP library for writing XML.
 
-Requirements
------------------------------
-
- * PHP 5.3.3+
-
 Installation
 -----------------------------
 
@@ -19,7 +14,7 @@ Installation
 ```
 {
 	"require": {
-        "maniaplanet/manialib-xml": "~0.1"
+        "maniaplanet/manialib-xml": "dev-event-dispatcher"
     }
 }
 ```
