@@ -202,6 +202,7 @@ class Node implements NodeInterface
 			foreach($this->children as $child)
 			{
 				$dispatcher->addSubscriber($child);
+				$child->onAddSubscribers($event, $eventName, $dispatcher);
 			}
 			$this->listenersRegistered = true;
 		}
