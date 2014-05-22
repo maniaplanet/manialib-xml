@@ -20,4 +20,6 @@ $root->appendChild(Node::create()->setNodeName('anotherOne'));
 
 $renderer = new Renderer();
 $renderer->setRoot($root);
+
+header("Content-type: application/xml; charset=UTF8");
 echo $renderer->getXML();
