@@ -10,7 +10,6 @@ class MyCustomNode extends Node
 {
 	function __construct()
 	{
-		parent::__construct();
 		$this->setNodeName('MyCustomNode');
 	}
 

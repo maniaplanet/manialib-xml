@@ -37,11 +37,6 @@ class Node implements NodeInterface
 	protected $parent;
 
 	/**
-	 * @var Node
-	 */
-	protected $current;
-
-	/**
 	 * @var callable[][]
 	 */
 	protected $callbacks = array();
@@ -60,16 +55,11 @@ class Node implements NodeInterface
 		);
 	}
 
-	function __construct()
-	{
-		$this->current = $this;
-	}
-
 	function __clone()
 	{
 		$this->deleteParent();
 
-		foreach($this->children as $key => $child)
+		foreach($this->children as $child)
 		{
 			$cloned = clone $child;
 			foreach($this as $propertyName => $propertyValue)
@@ -82,24 +72,6 @@ class Node implements NodeInterface
 			$this->removeChild($child);
 			$this->appendChild($cloned);
 		}
-
-		foreach($this->callbacks as $id => $callbacks)
-		{
-			foreach($callbacks as $key => $callback)
-			{
-				if(is_array($callback) && count($callback) == 2)
-				{
-					list($object, $method) = $callback;
-					if($object == $this->current)
-					{
-						// There may be some weird edge cases, but this should cover most of the cloning issues.
-						$this->callbacks[$id][$key] = array($this, $method);
-					}
-				}
-			}
-		}
-
-		$this->current = $this;
 	}
 
 	function getClone()
