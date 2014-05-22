@@ -2,8 +2,14 @@
 
 namespace ManiaLib\XML;
 
+use ManiaLib\XML\Rendering\Events;
+use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 class Node implements NodeInterface
 {
+
+	private $listenersRegistered = false;
 
 	/**
 	 * @var string
@@ -44,10 +50,14 @@ class Node implements NodeInterface
 	{
 		return new static;
 	}
-	
+
 	public static function getSubscribedEvents()
 	{
-		return array();
+		return array(
+			Events::ADD_SUBSCRIBER => array(
+				'onAddSubscriber'
+			)
+		);
 	}
 
 	function __construct()
@@ -199,7 +209,7 @@ class Node implements NodeInterface
 		$parent->appendChild($this);
 		return $this;
 	}
-	
+
 	function removeChild(NodeInterface $child)
 	{
 		$key = array_search($child, $this->children);
@@ -211,4 +221,19 @@ class Node implements NodeInterface
 		unset($this->children[$key]);
 		return $this;
 	}
+
+	function onAddSubscriber(Event $event, $eventName, EventDispatcherInterface $dispatcher)
+	{
+		if(!$this->listenersRegistered)
+		{
+			$this->registerListeners($dispatcher);
+			$this->listenersRegistered = true;
+		}
+	}
+
+	protected function registerListeners(EventDispatcherInterface $dispatcher)
+	{
+		
+	}
+
 }

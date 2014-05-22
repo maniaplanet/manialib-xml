@@ -3,7 +3,7 @@
 use ManiaLib\XML\Node;
 use ManiaLib\XML\Rendering\Renderer;
 
-require_once 'vendor/autoload.php';
+require_once '../vendor/autoload.php';
 
 $root = Node::create()
 	->setNodeName('rootElement')

@@ -49,6 +49,7 @@ class XMLWriterDriver implements DriverInterface
 	protected function getElement(NodeInterface $node)
 	{
 		$this->eventDispatcher->addSubscriber($node);
+		$this->eventDispatcher->dispatch(Events::ADD_SUBSCRIBER);
 		$this->eventDispatcher->dispatch(Events::preCreate($node));
 
 		// XML fragment?

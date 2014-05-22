@@ -89,4 +89,5 @@ interface NodeInterface extends EventSubscriberInterface
 	 * @return \static
 	 */
 	function removeChild(NodeInterface $child);
+
 }
