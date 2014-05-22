@@ -28,17 +28,25 @@ class Renderer
 		$this->driver = $driver;
 	}
 
+	/**
+	 * @return DriverInterface
+	 */
+	function getDriver()
+	{
+		if(!$this->driver)
+		{
+			$this->setDriver(new Drivers\XMLWriterDriver());
+		}
+		return $this->driver;
+	}
+
 	function getXML()
 	{
 		if(!($this->root instanceof Node))
 		{
 			throw new Exception('No ManiaLib\XML\Node root found.');
 		}
-		if(!($this->driver instanceof DriverInterface))
-		{
-			throw new Exception('No ManiaLib\XML\Rendering\DriverInterface driver found.');
-		}
-		return $this->driver->getXML($this->root);
+		return $this->getDriver()->getXML($this->root);
 	}
 
 }
