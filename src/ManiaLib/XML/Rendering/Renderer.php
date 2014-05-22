@@ -74,7 +74,6 @@ class Renderer implements RendererInterface
 		$this->getEventDispatcher()->addSubscriber($this->root);
 		$this->getEventDispatcher()->dispatch(Events::ADD_SUBSCRIBERS);
 		
-		
 		$this->getEventDispatcher()->dispatch(Events::PRE_RENDER);
 		$xml = $this->getDriver()->getXML($this->root);
 		$this->getEventDispatcher()->dispatch(Events::POST_RENDER);
