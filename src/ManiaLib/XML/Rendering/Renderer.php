@@ -4,8 +4,9 @@ namespace ManiaLib\XML\Rendering;
 
 use ManiaLib\XML\Exception;
 use ManiaLib\XML\Node;
+use ManiaLib\XML\Rendering\Drivers\XMLWriterDriver;
 
-class Renderer
+class Renderer implements RendererInterface
 {
 
 	/**
@@ -23,6 +24,14 @@ class Renderer
 		$this->root = $node;
 	}
 
+	/**
+	 * @return DriverInterface
+	 */
+	public function getRoot()
+	{
+		return $this->root;
+	}
+
 	function setDriver(DriverInterface $driver)
 	{
 		$this->driver = $driver;
@@ -35,7 +44,7 @@ class Renderer
 	{
 		if(!$this->driver)
 		{
-			$this->setDriver(new Drivers\XMLWriterDriver());
+			$this->setDriver(new XMLWriterDriver());
 		}
 		return $this->driver;
 	}
