@@ -27,72 +27,28 @@ Installation
 Features
 -----------------------------
  * Simple and flexible object-oriented architecture
- * Configurable rendering drivers (DOMDocument or XMLWriter based drivers included)
+ * Configurable rendering drivers
+ * Symfony\Component\EventDispatcher integration
  
 Architecture
 -----------------------------
 
- * You construct a tree of `ManiaLib\XML\Node`.
- * Setter methods return the element for chaining
- * `ManiaLib\XML\Node::create()` instanciates the object and returns it for easy chaining. 
-If you're running PHP 5.4+ you can use class member access on instantiation instead eg. 
-`(new Node)->setAttribute('foo', 'bar')`.
- * The important methods of Node are:
+ * You construct a tree of `ManiaLib\XML\NodeInterface`.
+ * `ManiaLib\XML\Node` is the default implementation of `ManiaLib\XML\NodeInterface`.
+ * Setter methods return the element for chaining (eg. `$node->setNodeName('foo')->setNodeValue('bar');`.
+ * `ManiaLib\XML\Node::create()` instanciates the object and returns it for easy chaining (eg. `Node::create()->setNodeName('foo');`).
+ * If you're running PHP 5.4+ you can use class member access on instantiation instead eg. 
+`(new Node)->setNodeName('foo');`.
+ * See `ManiaLib\XML\NodeInterface` for reference.
+ * Rendering is done by an implementation of `ManiaLib\XML\Rendering\RendererInterface`.
+ * `ManiaLib\XML\Rendering\Renderer` is the default implementation of `ManiaLib\XML\Rendering\RendererInterface`.
+ * `ManiaLib\XML\Rendering\RendererInterface` needs an implementation of `ManiaLib\XML\Rendering\DriverInterface`.
+ * `ManiaLib\XML\Rendering\Drivers\XMLWriterDriver` is the default implementation of `ManiaLib\XML\Rendering\DriverInterface`.
 
-```
-namespace ManiaLib\Manialink;
-
-abstract class Node
-{
-	function setNodeName($nodeName)
-	function setNodeValue($value)
-	function setAttribute($name, $value)
-	function appendChild(Node $child)
-	function appendTo(Node $parent)
-}
-```
- * Actual XML rendering is done by an implementation of `ManiaLib\XML\Rendering\RendererInterface` (see examples for usage).
-
-Example
+Examples
 -----------------------------
 
-```
-<?php
-
-use ManiaLib\XML\Node;
-use ManiaLib\XML\Rendering\Renderer;
-
-require_once 'vendor/autoload.php';
-
-$root = Node::create()
-	->setNodeName('rootElement')
-	->setAttribute('rootAttrivute', '1.0');
-
-Node::create()
-	->setNodeName('someElement')
-	->setAttribute('someAttribute', 'foo')
-	->setAttribute('otherAttribute', 'bar')
-	->setNodeValue('Hello world')
-	->appendTo($root);
-
-$root->appendChild(Node::create()->setNodeName('anotherOne'));
-
-$renderer = new Renderer();
-$renderer->setRoot($root);
-echo $renderer->getXML();
-```
-
-It will output:
-
-```
-<?xml version="1.0" encoding="UTF-8"?>
-<rootElement rootAttrivute="1.0">
-	<someElement someAttribute="foo" otherAttribute="bar">
-		Hello world
-	</someElement>
-	<anotherOne/>
-</rootElement>
-```
+See /examples directory
 
 Todo
 -----------------------------
