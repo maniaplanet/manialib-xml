@@ -83,7 +83,7 @@ interface NodeInterface extends EventSubscriberInterface
 	/**
 	 * @return \static
 	 */
-	function appendTo(Node $parent);
+	function appendTo(NodeInterface $parent);
 
 	/**
 	 * @return \static

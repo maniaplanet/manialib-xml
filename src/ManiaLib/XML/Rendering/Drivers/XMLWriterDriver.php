@@ -5,6 +5,7 @@ namespace ManiaLib\XML\Rendering\Drivers;
 use ManiaLib\XML\Fragment;
 use ManiaLib\XML\NodeInterface;
 use ManiaLib\XML\Rendering\DriverInterface;
+use ManiaLib\XML\Rendering\Events;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use XMLWriter;
 
@@ -16,13 +17,18 @@ class XMLWriterDriver implements DriverInterface
 	 */
 	protected $writer;
 
+	/**
+	 * @var EventDispatcherInterface 
+	 */
+	protected $eventDispatcher;
+
 	function __construct()
 	{
 		$this->writer = new XMLWriter();
 		$this->writer->openMemory();
 		$this->writer->startDocument('1.0', 'UTF-8');
 	}
-	
+
 	public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
 	{
 		$this->eventDispatcher = $eventDispatcher;
@@ -42,14 +48,14 @@ class XMLWriterDriver implements DriverInterface
 
 	protected function getElement(NodeInterface $node)
 	{
+		$this->eventDispatcher->addSubscriber($node);
+		$this->eventDispatcher->dispatch(Events::preCreate($node));
+
 		// XML fragment?
 		if($node instanceof Fragment)
 		{
 			return $this->appendXML($node->getNodeValue());
 		}
-
-		// Filter
-		$node->executeCallbacks('prefilter');
 
 		// Create
 		$this->writer->startElement($node->getNodeName());
@@ -61,7 +67,7 @@ class XMLWriterDriver implements DriverInterface
 		{
 			$this->writer->writeAttribute($name, $value);
 		}
-		
+
 		// Value
 		if($node->getNodeValue() !== null)
 		{
@@ -77,8 +83,7 @@ class XMLWriterDriver implements DriverInterface
 		// End create
 		$this->writer->endElement();
 
-		// Filter
-		$node->executeCallbacks('postfilter');
+		$this->eventDispatcher->dispatch(Events::postCreate($node));
 	}
 
 }

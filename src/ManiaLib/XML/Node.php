@@ -47,7 +47,7 @@ class Node implements NodeInterface
 	
 	public static function getSubscribedEvents()
 	{
-		
+		return array();
 	}
 
 	function __construct()
@@ -211,35 +211,4 @@ class Node implements NodeInterface
 		unset($this->children[$key]);
 		return $this;
 	}
-
-	function registerCallback($event, $callback)
-	{
-		if(!is_callable($callback))
-		{
-			throw new Exception('Provided $callback is not callable in '.get_called_class());
-		}
-		$this->callbacks[$event][] = $callback;
-	}
-
-	function prependCallback($event, $callback)
-	{
-		if(!is_callable($callback))
-		{
-			throw new Exception('Provided $callback is not callable in '.get_called_class());
-		}
-		array_unshift($this->callbacks[$event], $callback);
-		return $this;
-	}
-
-	function executeCallbacks($event, $parameters = array())
-	{
-		if(array_key_exists($event, $this->callbacks))
-		{
-			foreach($this->callbacks[$event] as $callback)
-			{
-				call_user_func_array($callback, $parameters);
-			}
-		}
-	}
-
 }

@@ -40,14 +40,14 @@ class DOMDocumentDriver implements DriverInterface
 
 	protected function getElement(NodeInterface $node)
 	{
+		$this->eventDispatcher->addSubscriber($node);
+		$this->eventDispatcher->dispatch(Events::preCreate($node));
+
 		// XML fragment?
 		if($node instanceof Fragment)
 		{
 			return $this->appendXML($node->getNodeValue());
 		}
-
-		// Filter
-		$node->executeCallbacks('prefilter');
 
 		// Create
 		$element = $this->document->createElement($node->getNodeName());
@@ -71,8 +71,7 @@ class DOMDocumentDriver implements DriverInterface
 			$element->appendChild($subelement);
 		}
 
-		// Filter
-		$node->executeCallbacks('postfilter');
+		$this->eventDispatcher->dispatch(Events::postCreate($node));
 
 		return $element;
 	}
