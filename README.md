@@ -2,6 +2,7 @@ ManiaLib\XML
 ===================================================
 
 [![Latest Stable Version](https://poser.pugx.org/maniaplanet/manialib-xml/v/stable.png)](https://packagist.org/packages/maniaplanet/manialib-xml)
+[![Development Version](https://poser.pugx.org/maniaplanet/manialib-xml/v/unstable.png)](https://packagist.org/packages/maniaplanet/manialib-xml)
 [![Total Downloads](https://poser.pugx.org/maniaplanet/manialib-xml/downloads.png)](https://packagist.org/packages/maniaplanet/manialib-xml)
 
 ManiaLib\XML is an object-oriented PHP library for writing XML.
