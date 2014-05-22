@@ -3,7 +3,7 @@
 namespace ManiaLib\XML\Rendering\Drivers;
 
 use ManiaLib\XML\Fragment;
-use ManiaLib\XML\Node;
+use ManiaLib\XML\NodeInterface;
 use ManiaLib\XML\Rendering\DriverInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use XMLWriter;
@@ -28,7 +28,7 @@ class XMLWriterDriver implements DriverInterface
 		$this->eventDispatcher = $eventDispatcher;
 	}
 
-	function getXML(Node $root)
+	function getXML(NodeInterface $root)
 	{
 		$this->getElement($root);
 		$this->writer->endDocument();
@@ -40,7 +40,7 @@ class XMLWriterDriver implements DriverInterface
 		$this->writer->writeRaw($xml);
 	}
 
-	protected function getElement(Node $node)
+	protected function getElement(NodeInterface $node)
 	{
 		// XML fragment?
 		if($node instanceof Fragment)

@@ -2,7 +2,7 @@
 
 namespace ManiaLib\XML;
 
-class Node
+class Node implements NodeInterface
 {
 
 	/**
@@ -40,12 +40,14 @@ class Node
 	 */
 	protected $callbacks = array();
 
-	/**
-	 * @return \static
-	 */
-	final static function create()
+	public static function create()
 	{
 		return new static;
+	}
+	
+	public static function getSubscribedEvents()
+	{
+		
 	}
 
 	function __construct()
@@ -90,46 +92,28 @@ class Node
 		$this->current = $this;
 	}
 
-	/**
-	 * @return \static
-	 */
-	final function getClone()
+	function getClone()
 	{
 		return clone $this;
 	}
 
-	/**
-	 * USE AT YOUR OWN RISK!
-	 * Change the XML tag name
-	 * 
-	 * @return \static
-	 */
 	function setNodeName($nodeName)
 	{
 		$this->nodeName = $nodeName;
 		return $this;
 	}
 
-	/**
-	 * @return string
-	 */
 	function getNodeName()
 	{
 		return $this->nodeName;
 	}
 
-	/**
-	 * @return \static
-	 */
 	function setNodeValue($value)
 	{
 		$this->nodeValue = $value;
 		return $this;
 	}
 
-	/**
-	 * @return \static
-	 */
 	function appendNodeValue($value)
 	{
 		$this->nodeValue .= $value;
@@ -141,18 +125,12 @@ class Node
 		return $this->nodeValue;
 	}
 
-	/**
-	 * @return \static
-	 */
 	function setAttribute($name, $value)
 	{
 		$this->attributes[$name] = $value;
 		return $this;
 	}
 
-	/**
-	 * @return \static
-	 */
 	function appendAttribute($name, $value)
 	{
 		$this->attributes[$name] .= $value;
@@ -183,19 +161,18 @@ class Node
 		return $this;
 	}
 
-	function setParent(Node $node)
+	function setParent(NodeInterface $node)
 	{
 		$this->parent = $node;
+		return $this;
 	}
 
 	function deleteParent()
 	{
 		$this->parent = null;
+		return $this;
 	}
 
-	/**
-	 * @return Node
-	 */
 	function getParent()
 	{
 		return $this->parent;
@@ -206,10 +183,7 @@ class Node
 		return $this->children;
 	}
 
-	/**
-	 * @return \static
-	 */
-	function appendChild(Node $child)
+	function appendChild(NodeInterface $child)
 	{
 		if($child->getParent() instanceof Node)
 		{
@@ -220,16 +194,13 @@ class Node
 		return $this;
 	}
 
-	/**
-	 * @return \static
-	 */
-	function appendTo(Node $parent)
+	function appendTo(NodeInterface $parent)
 	{
 		$parent->appendChild($this);
 		return $this;
 	}
-
-	function removeChild(Node $child)
+	
+	function removeChild(NodeInterface $child)
 	{
 		$key = array_search($child, $this->children);
 		if($key === false)
@@ -238,6 +209,7 @@ class Node
 		}
 		$this->children[$key]->deleteParent();
 		unset($this->children[$key]);
+		return $this;
 	}
 
 	function registerCallback($event, $callback)

@@ -2,16 +2,16 @@
 
 namespace ManiaLib\XML\Rendering;
 
-use ManiaLib\XML\Node;
+use ManiaLib\XML\NodeInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 interface RendererInterface
 {
 
-	function setRoot(Node $node);
+	function setRoot(NodeInterface $node);
 
 	/**
-	 * @return Node
+	 * @return NodeInterface
 	 */
 	function getRoot();
 

@@ -3,14 +3,14 @@
 namespace ManiaLib\XML\Rendering;
 
 use ManiaLib\XML\Exception;
-use ManiaLib\XML\Node;
+use ManiaLib\XML\NodeInterface;
 use ManiaLib\XML\Rendering\Drivers\XMLWriterDriver;
 
 class Renderer implements RendererInterface
 {
 
 	/**
-	 * @var Node
+	 * @var NodeInterface
 	 */
 	protected $root;
 
@@ -24,7 +24,7 @@ class Renderer implements RendererInterface
 	 */
 	protected $eventDispatcher;
 
-	function setRoot(Node $node)
+	function setRoot(NodeInterface $node)
 	{
 		$this->root = $node;
 	}
@@ -66,9 +66,9 @@ class Renderer implements RendererInterface
 
 	function getXML()
 	{
-		if(!($this->root instanceof Node))
+		if(!($this->root instanceof NodeInterface))
 		{
-			throw new Exception('No ManiaLib\XML\Node root found.');
+			throw new Exception('No ManiaLib\XML\NodeInterface root found.');
 		}
 		return $this->getDriver()->getXML($this->root);
 	}
