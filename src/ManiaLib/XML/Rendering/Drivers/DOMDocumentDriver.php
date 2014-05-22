@@ -1,11 +1,12 @@
 <?php
 
+use ManiaLib\XML\Fragment;
+use ManiaLib\XML\Node;
+use ManiaLib\XML\Rendering\DriverInterface;
+
 namespace ManiaLib\XML\Rendering\Drivers;
 
-use DOMDocument;
-use ManiaLib\XML\Node;
-
-class DOMDocumentDriver implements \ManiaLib\XML\Rendering\DriverInterface
+class DOMDocumentDriver implements DriverInterface
 {
 
 	/**
@@ -34,7 +35,7 @@ class DOMDocumentDriver implements \ManiaLib\XML\Rendering\DriverInterface
 	protected function getElement(Node $node)
 	{
 		// XML fragment?
-		if($node instanceof \ManiaLib\XML\Fragment)
+		if($node instanceof Fragment)
 		{
 			return $this->appendXML($node->getNodeValue());
 		}

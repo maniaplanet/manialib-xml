@@ -1,6 +1,6 @@
 <?php
 
-namespace ManiaLib\Manialink\XML;
+namespace ManiaLib\XML;
 
 /**
  * Use this element to insert a piece of XML code via static::setNodeValue() inside a Manialink page.
