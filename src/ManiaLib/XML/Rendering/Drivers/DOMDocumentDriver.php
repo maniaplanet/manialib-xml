@@ -1,10 +1,11 @@
 <?php
 
+namespace ManiaLib\XML\Rendering\Drivers;
+
+use DOMDocument;
 use ManiaLib\XML\Fragment;
 use ManiaLib\XML\Node;
 use ManiaLib\XML\Rendering\DriverInterface;
-
-namespace ManiaLib\XML\Rendering\Drivers;
 
 class DOMDocumentDriver implements DriverInterface
 {
