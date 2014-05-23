@@ -7,5 +7,5 @@ namespace ManiaLib\XML;
  */
 interface FragmentInterface extends NodeInterface
 {
-	
+
 }

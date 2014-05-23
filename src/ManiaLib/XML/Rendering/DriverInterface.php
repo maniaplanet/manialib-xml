@@ -8,9 +8,9 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 interface DriverInterface
 {
 
-	function setEventDispatcher(EventDispatcherInterface $eventDispatcher);
+    function setEventDispatcher(EventDispatcherInterface $eventDispatcher);
 
-	function getXML(NodeInterface $root);
+    function getXML(NodeInterface $root);
 
-	function appendXML($xml);
+    function appendXML($xml);
 }
