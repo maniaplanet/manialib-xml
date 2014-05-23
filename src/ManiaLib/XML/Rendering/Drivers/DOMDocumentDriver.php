@@ -12,74 +12,70 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 class DOMDocumentDriver implements DriverInterface
 {
 
-	/**
-	 * @var DOMDocument
-	 */
-	protected $document;
+    /**
+     * @var DOMDocument
+     */
+    protected $document;
 
-	/**
-	 * @var EventDispatcherInterface 
-	 */
-	protected $eventDispatcher;
+    /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
 
-	function __construct()
-	{
-		$this->document = new DOMDocument('1.0', 'UTF-8');
-	}
+    function __construct()
+    {
+        $this->document = new DOMDocument('1.0', 'UTF-8');
+    }
 
-	public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
-	{
-		$this->eventDispatcher = $eventDispatcher;
-	}
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
 
-	function getXML(NodeInterface $root)
-	{
-		$this->document->appendChild($this->getElement($root));
-		return $this->document->saveXML();
-	}
+    function getXML(NodeInterface $root)
+    {
+        $this->document->appendChild($this->getElement($root));
+        return $this->document->saveXML();
+    }
 
-	function appendXML($xml)
-	{
-		$fragment = $this->document->createDocumentFragment();
-		$fragment->appendXML($xml);
-		return $fragment;
-	}
+    function appendXML($xml)
+    {
+        $fragment = $this->document->createDocumentFragment();
+        $fragment->appendXML($xml);
+        return $fragment;
+    }
 
-	protected function getElement(NodeInterface $node)
-	{
-		$this->eventDispatcher->dispatch(Events::preRender($node));
+    protected function getElement(NodeInterface $node)
+    {
+        $this->eventDispatcher->dispatch(Events::preRender($node));
 
-		// XML fragment?
-		if($node instanceof FragmentInterface)
-		{
-			return $this->appendXML($node->getNodeValue());
-		}
+        // XML fragment?
+        if ($node instanceof FragmentInterface) {
+            return $this->appendXML($node->getNodeValue());
+        }
 
-		// Create
-		$element = $this->document->createElement($node->getNodeName());
+        // Create
+        $element = $this->document->createElement($node->getNodeName());
 
-		// Value
-		if($node->getNodeValue() !== null)
-		{
-			$element->appendChild($this->document->createTextNode($node->getNodeValue()));
-		}
+        // Value
+        if ($node->getNodeValue() !== null) {
+            $element->appendChild($this->document->createTextNode($node->getNodeValue()));
+        }
 
-		// Attributes
-		foreach($node->getAttributes() as $name => $value)
-		{
-			$element->setAttribute($name, $value);
-		}
+        // Attributes
+        foreach ($node->getAttributes() as $name => $value) {
+            $element->setAttribute($name, $value);
+        }
 
-		// Children
-		foreach($node->getChildren() as $child)
-		{
-			$subelement = $this->getElement($child);
-			$element->appendChild($subelement);
-		}
+        // Children
+        foreach ($node->getChildren() as $child) {
+            $subelement = $this->getElement($child);
+            $element->appendChild($subelement);
+        }
 
-		$this->eventDispatcher->dispatch(Events::postRender($node));
+        $this->eventDispatcher->dispatch(Events::postRender($node));
 
-		return $element;
-	}
+        return $element;
+    }
 
 }
