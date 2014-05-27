@@ -3,73 +3,79 @@
 namespace ManiaLib\XML\Rendering\Drivers;
 
 use DOMDocument;
-use ManiaLib\XML\Fragment;
-use ManiaLib\XML\Node;
+use ManiaLib\XML\FragmentInterface;
+use ManiaLib\XML\NodeInterface;
 use ManiaLib\XML\Rendering\DriverInterface;
+use ManiaLib\XML\Rendering\Events;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 class DOMDocumentDriver implements DriverInterface
 {
 
-	/**
-	 * @var DOMDocument
-	 */
-	protected $document;
+    /**
+     * @var DOMDocument
+     */
+    protected $document;
 
-	function __construct()
-	{
-		$this->document = new DOMDocument('1.0', 'UTF-8');
-	}
+    /**
+     * @var EventDispatcherInterface
+     */
+    protected $eventDispatcher;
 
-	function getXML(Node $root)
-	{
-		$this->document->appendChild($this->getElement($root));
-		return $this->document->saveXML();
-	}
+    function __construct()
+    {
+        $this->document = new DOMDocument('1.0', 'UTF-8');
+    }
 
-	function appendXML($xml)
-	{
-		$fragment = $this->document->createDocumentFragment();
-		$fragment->appendXML($xml);
-		return $fragment;
-	}
+    public function setEventDispatcher(EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
 
-	protected function getElement(Node $node)
-	{
-		// XML fragment?
-		if($node instanceof Fragment)
-		{
-			return $this->appendXML($node->getNodeValue());
-		}
+    function getXML(NodeInterface $root)
+    {
+        $this->document->appendChild($this->getElement($root));
+        return $this->document->saveXML();
+    }
 
-		// Filter
-		$node->executeCallbacks('prefilter');
+    function appendXML($xml)
+    {
+        $fragment = $this->document->createDocumentFragment();
+        $fragment->appendXML($xml);
+        return $fragment;
+    }
 
-		// Create
-		$element = $this->document->createElement($node->getNodeName());
+    protected function getElement(NodeInterface $node)
+    {
+        $this->eventDispatcher->dispatch(Events::preRender($node));
 
-		// Value
-		if($node->getNodeValue() !== null)
-		{
-			$element->appendChild($this->document->createTextNode($node->getNodeValue()));
-		}
+        // XML fragment?
+        if ($node instanceof FragmentInterface) {
+            return $this->appendXML($node->getNodeValue());
+        }
 
-		// Attributes
-		foreach($node->getAttributes() as $name => $value)
-		{
-			$element->setAttribute($name, $value);
-		}
+        // Create
+        $element = $this->document->createElement($node->getNodeName());
 
-		// Children
-		foreach($node->getChildren() as $child)
-		{
-			$subelement = $this->getElement($child);
-			$element->appendChild($subelement);
-		}
+        // Value
+        if ($node->getNodeValue() !== null) {
+            $element->appendChild($this->document->createTextNode($node->getNodeValue()));
+        }
 
-		// Filter
-		$node->executeCallbacks('postfilter');
+        // Attributes
+        foreach ($node->getAttributes() as $name => $value) {
+            $element->setAttribute($name, $value);
+        }
 
-		return $element;
-	}
+        // Children
+        foreach ($node->getChildren() as $child) {
+            $subelement = $this->getElement($child);
+            $element->appendChild($subelement);
+        }
+
+        $this->eventDispatcher->dispatch(Events::postRender($node));
+
+        return $element;
+    }
 
 }

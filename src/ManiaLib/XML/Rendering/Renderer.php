@@ -3,50 +3,78 @@
 namespace ManiaLib\XML\Rendering;
 
 use ManiaLib\XML\Exception;
-use ManiaLib\XML\Node;
+use ManiaLib\XML\NodeInterface;
+use ManiaLib\XML\Rendering\Drivers\XMLWriterDriver;
 
-class Renderer
+class Renderer implements RendererInterface
 {
 
-	/**
-	 * @var Node
-	 */
-	protected $root;
+    /**
+     * @var NodeInterface
+     */
+    protected $root;
 
-	/**
-	 * @var DriverInterface
-	 */
-	protected $driver;
+    /**
+     * @var DriverInterface
+     */
+    protected $driver;
 
-	function setRoot(Node $node)
-	{
-		$this->root = $node;
-	}
+    /**
+     * @var \Symfony\Component\EventDispatcher\EventDispatcherInterface
+     */
+    protected $eventDispatcher;
 
-	function setDriver(DriverInterface $driver)
-	{
-		$this->driver = $driver;
-	}
+    function setRoot(NodeInterface $node)
+    {
+        $this->root = $node;
+    }
 
-	/**
-	 * @return DriverInterface
-	 */
-	function getDriver()
-	{
-		if(!$this->driver)
-		{
-			$this->setDriver(new Drivers\XMLWriterDriver());
-		}
-		return $this->driver;
-	}
+    public function getRoot()
+    {
+        return $this->root;
+    }
 
-	function getXML()
-	{
-		if(!($this->root instanceof Node))
-		{
-			throw new Exception('No ManiaLib\XML\Node root found.');
-		}
-		return $this->getDriver()->getXML($this->root);
-	}
+    function setDriver(DriverInterface $driver)
+    {
+        $this->driver = $driver;
+    }
+
+    function getDriver()
+    {
+        if (!$this->driver) {
+            $driver = new XMLWriterDriver();
+            $driver->setEventDispatcher($this->getEventDispatcher());
+            $this->setDriver($driver);
+        }
+        return $this->driver;
+    }
+
+    public function setEventDispatcher(\Symfony\Component\EventDispatcher\EventDispatcherInterface $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
+    public function getEventDispatcher()
+    {
+        if (!$this->eventDispatcher) {
+            $this->setEventDispatcher(new \Symfony\Component\EventDispatcher\EventDispatcher());
+        }
+        return $this->eventDispatcher;
+    }
+
+    function getXML()
+    {
+        if (!($this->root instanceof NodeInterface)) {
+            throw new Exception('No ManiaLib\XML\NodeInterface root found.');
+        }
+
+        $this->getEventDispatcher()->addSubscriber($this->root);
+        $this->getEventDispatcher()->dispatch(Events::ADD_SUBSCRIBERS);
+
+        $this->getEventDispatcher()->dispatch(Events::PRE_RENDER);
+        $xml = $this->getDriver()->getXML($this->root);
+        $this->getEventDispatcher()->dispatch(Events::POST_RENDER);
+        return $xml;
+    }
 
 }

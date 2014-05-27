@@ -2,7 +2,7 @@
     "name": "maniaplanet/manialib-xml",
     "type": "library",
     "description": "Object-oriented PHP library for writing XML.",
-    "keywords": ["XML"],
+    "keywords": ["ManiaPlanet", "XML", "DOMDocument", "XMLWriter"],
     "license": "MIT",
     "homepage": "https://github.com/maniaplanet/manialib-xml",
     "authors": [
@@ -16,12 +16,15 @@
         "forum": "https://github.com/maniaplanet/manialib-xml/issues"
     },
     "require": {
-        "php": ">=5.3"
+        "php": ">=5.3",
+        "symfony/event-dispatcher": "~2.4"
     },
     "autoload": {
         "psr-4": {"ManiaLib\\": "src/ManiaLib/"}
     },
-     "archive": {
-        "exclude": ["/example.php"]
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.2.x-dev"
+        }
     }
 }

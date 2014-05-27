@@ -2,10 +2,15 @@
 
 namespace ManiaLib\XML\Rendering;
 
+use ManiaLib\XML\NodeInterface;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
 interface DriverInterface
 {
 
-	function getXML(\ManiaLib\XML\Node $root);
+    function setEventDispatcher(EventDispatcherInterface $eventDispatcher);
 
-	function appendXML($xml);
+    function getXML(NodeInterface $root);
+
+    function appendXML($xml);
 }

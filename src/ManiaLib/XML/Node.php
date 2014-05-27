@@ -2,272 +2,208 @@
 
 namespace ManiaLib\XML;
 
-class Node
+use ManiaLib\XML\Rendering\Events;
+use Symfony\Component\EventDispatcher\Event;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+class Node implements NodeInterface
 {
 
-	/**
-	 * @var string
-	 */
-	protected $nodeName;
+    private $listenersRegistered = false;
 
-	/**
-	 * @var string
-	 */
-	protected $nodeValue;
+    /**
+     * @var string
+     */
+    protected $nodeName;
 
-	/**
-	 * @var mixed[]
-	 */
-	protected $attributes = array();
+    /**
+     * @var string
+     */
+    protected $nodeValue;
 
-	/**
-	 * @var Node[]
-	 */
-	protected $children = array();
+    /**
+     * @var mixed[]
+     */
+    protected $attributes = array();
 
-	/**
-	 * @var Node
-	 */
-	protected $parent;
+    /**
+     * @var Node[]
+     */
+    protected $children = array();
 
-	/**
-	 * @var Node
-	 */
-	protected $current;
+    /**
+     * @var Node
+     */
+    protected $parent;
 
-	/**
-	 * @var callable[][]
-	 */
-	protected $callbacks = array();
+    /**
+     * @var callable[][]
+     */
+    protected $callbacks = array();
 
-	/**
-	 * @return \static
-	 */
-	final static function create()
-	{
-		return new static;
-	}
+    public static function create()
+    {
+        return new static;
+    }
 
-	function __construct()
-	{
-		$this->current = $this;
-	}
+    public static function getSubscribedEvents()
+    {
+        return array(
+            Events::ADD_SUBSCRIBERS => array(
+                'onAddSubscribers'
+            )
+        );
+    }
 
-	function __clone()
-	{
-		$this->deleteParent();
+    function __clone()
+    {
+        $this->deleteParent();
 
-		foreach($this->children as $key => $child)
-		{
-			$cloned = clone $child;
-			foreach($this as $propertyName => $propertyValue)
-			{
-				if($child === $propertyValue)
-				{
-					$this->$propertyName = $cloned;
-				}
-			}
-			$this->removeChild($child);
-			$this->appendChild($cloned);
-		}
+        foreach ($this->children as $child) {
+            $cloned = clone $child;
+            foreach ($this as $propertyName => $propertyValue) {
+                if ($child === $propertyValue) {
+                    $this->$propertyName = $cloned;
+                }
+            }
+            $this->removeChild($child);
+            $this->appendChild($cloned);
+        }
+    }
 
-		foreach($this->callbacks as $id => $callbacks)
-		{
-			foreach($callbacks as $key => $callback)
-			{
-				if(is_array($callback) && count($callback) == 2)
-				{
-					list($object, $method) = $callback;
-					if($object == $this->current)
-					{
-						// There may be some weird edge cases, but this should cover most of the cloning issues.
-						$this->callbacks[$id][$key] = array($this, $method);
-					}
-				}
-			}
-		}
+    function getClone()
+    {
+        return clone $this;
+    }
 
-		$this->current = $this;
-	}
+    function setNodeName($nodeName)
+    {
+        $this->nodeName = $nodeName;
+        return $this;
+    }
 
-	/**
-	 * @return \static
-	 */
-	final function getClone()
-	{
-		return clone $this;
-	}
+    function getNodeName()
+    {
+        return $this->nodeName;
+    }
 
-	/**
-	 * USE AT YOUR OWN RISK!
-	 * Change the XML tag name
-	 * 
-	 * @return \static
-	 */
-	function setNodeName($nodeName)
-	{
-		$this->nodeName = $nodeName;
-		return $this;
-	}
+    function setNodeValue($value)
+    {
+        $this->nodeValue = $value;
+        return $this;
+    }
 
-	/**
-	 * @return string
-	 */
-	function getNodeName()
-	{
-		return $this->nodeName;
-	}
+    function appendNodeValue($value)
+    {
+        $this->nodeValue .= $value;
+        return $this;
+    }
 
-	/**
-	 * @return \static
-	 */
-	function setNodeValue($value)
-	{
-		$this->nodeValue = $value;
-		return $this;
-	}
+    function getNodeValue()
+    {
+        return $this->nodeValue;
+    }
 
-	/**
-	 * @return \static
-	 */
-	function appendNodeValue($value)
-	{
-		$this->nodeValue .= $value;
-		return $this;
-	}
+    function setAttribute($name, $value)
+    {
+        $this->attributes[$name] = $value;
+        return $this;
+    }
 
-	function getNodeValue()
-	{
-		return $this->nodeValue;
-	}
+    function appendAttribute($name, $value)
+    {
+        $this->attributes[$name] .= $value;
+        return $this;
+    }
 
-	/**
-	 * @return \static
-	 */
-	function setAttribute($name, $value)
-	{
-		$this->attributes[$name] = $value;
-		return $this;
-	}
+    function attributeExists($name)
+    {
+        return array_key_exists($name, $this->attributes);
+    }
 
-	/**
-	 * @return \static
-	 */
-	function appendAttribute($name, $value)
-	{
-		$this->attributes[$name] .= $value;
-		return $this;
-	}
+    function getAttribute($name, $default = null)
+    {
+        return $this->attributeExists($name) ? $this->attributes[$name] : $default;
+    }
 
-	function attributeExists($name)
-	{
-		return array_key_exists($name, $this->attributes);
-	}
+    function getAttributes()
+    {
+        return $this->attributes;
+    }
 
-	function getAttribute($name, $default = null)
-	{
-		return $this->attributeExists($name) ? $this->attributes[$name] : $default;
-	}
+    /**
+     * @return \static
+     */
+    function deleteAttribute($name)
+    {
+        unset($this->attributes[$name]);
+        return $this;
+    }
 
-	function getAttributes()
-	{
-		return $this->attributes;
-	}
+    function setParent(NodeInterface $node)
+    {
+        $this->parent = $node;
+        return $this;
+    }
 
-	/**
-	 * @return \static
-	 */
-	function deleteAttribute($name)
-	{
-		unset($this->attributes[$name]);
-		return $this;
-	}
+    function deleteParent()
+    {
+        $this->parent = null;
+        return $this;
+    }
 
-	function setParent(Node $node)
-	{
-		$this->parent = $node;
-	}
+    function getParent()
+    {
+        return $this->parent;
+    }
 
-	function deleteParent()
-	{
-		$this->parent = null;
-	}
+    function getChildren()
+    {
+        return $this->children;
+    }
 
-	/**
-	 * @return Node
-	 */
-	function getParent()
-	{
-		return $this->parent;
-	}
+    function appendChild(NodeInterface $child)
+    {
+        if ($child->getParent() instanceof Node) {
+            throw new Exception('Cannot append a child: it already has a parent Node.');
+        }
+        $this->children[] = $child;
+        $child->setParent($this);
+        return $this;
+    }
 
-	function getChildren()
-	{
-		return $this->children;
-	}
+    function appendTo(NodeInterface $parent)
+    {
+        $parent->appendChild($this);
+        return $this;
+    }
 
-	/**
-	 * @return \static
-	 */
-	function appendChild(Node $child)
-	{
-		if($child->getParent() instanceof Node)
-		{
-			throw new Exception('Cannot append a child: it already has a parent Node.');
-		}
-		$this->children[] = $child;
-		$child->setParent($this);
-		return $this;
-	}
+    function removeChild(NodeInterface $child)
+    {
+        $key = array_search($child, $this->children);
+        if ($key === false) {
+            throw new Exception('Cannot remove a child: it does not exist.');
+        }
+        $this->children[$key]->deleteParent();
+        unset($this->children[$key]);
+        return $this;
+    }
 
-	/**
-	 * @return \static
-	 */
-	function appendTo(Node $parent)
-	{
-		$parent->appendChild($this);
-		return $this;
-	}
+    function onAddSubscribers(Event $event, $eventName, EventDispatcherInterface $dispatcher)
+    {
+        if (!$this->listenersRegistered) {
+            $this->registerListeners($dispatcher);
+            foreach ($this->children as $child) {
+                $dispatcher->addSubscriber($child);
+                $child->onAddSubscribers($event, $eventName, $dispatcher);
+            }
+            $this->listenersRegistered = true;
+        }
+    }
 
-	function removeChild(Node $child)
-	{
-		$key = array_search($child, $this->children);
-		if($key === false)
-		{
-			throw new Exception('Cannot remove a child: it does not exist.');
-		}
-		$this->children[$key]->deleteParent();
-		unset($this->children[$key]);
-	}
+    protected function registerListeners(EventDispatcherInterface $dispatcher)
+    {
 
-	function registerCallback($event, $callback)
-	{
-		if(!is_callable($callback))
-		{
-			throw new Exception('Provided $callback is not callable in '.get_called_class());
-		}
-		$this->callbacks[$event][] = $callback;
-	}
-
-	function prependCallback($event, $callback)
-	{
-		if(!is_callable($callback))
-		{
-			throw new Exception('Provided $callback is not callable in '.get_called_class());
-		}
-		array_unshift($this->callbacks[$event], $callback);
-		return $this;
-	}
-
-	function executeCallbacks($event, $parameters = array())
-	{
-		if(array_key_exists($event, $this->callbacks))
-		{
-			foreach($this->callbacks[$event] as $callback)
-			{
-				call_user_func_array($callback, $parameters);
-			}
-		}
-	}
+    }
 
 }
