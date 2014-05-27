@@ -29,17 +29,13 @@ Features
 Architecture
 -----------------------------
 
- * You construct a tree of `ManiaLib\XML\NodeInterface`.
- * `ManiaLib\XML\Node` is the default implementation of `ManiaLib\XML\NodeInterface`.
+ * You construct a tree of `ManiaLib\XML\Node`.
  * Setter methods return the element for chaining (eg. `$node->setNodeName('foo')->setNodeValue('bar');`.
  * `ManiaLib\XML\Node::create()` instanciates the object and returns it for easy chaining (eg. `Node::create()->setNodeName('foo');`).
  * If you're running PHP 5.4+ you can use class member access on instantiation instead eg. 
 `(new Node)->setNodeName('foo');`.
  * See `ManiaLib\XML\NodeInterface` for reference.
- * Rendering is done by an implementation of `ManiaLib\XML\Rendering\RendererInterface`.
- * `ManiaLib\XML\Rendering\Renderer` is the default implementation of `ManiaLib\XML\Rendering\RendererInterface`.
- * `ManiaLib\XML\Rendering\RendererInterface` needs an implementation of `ManiaLib\XML\Rendering\DriverInterface`.
- * `ManiaLib\XML\Rendering\Drivers\XMLWriterDriver` is the default implementation of `ManiaLib\XML\Rendering\DriverInterface`.
+ * You then pass the root `Node` to an instance of `ManiaLib\XML\Rendering\Renderer`.
 
 Examples
 -----------------------------
