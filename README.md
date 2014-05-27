@@ -15,7 +15,7 @@ Installation
 ```
 {
 	"require": {
-        "maniaplanet/manialib-xml": "~0.2.0"
+        "maniaplanet/manialib-xml": "0.2.*@dev"
     }
 }
 ```
