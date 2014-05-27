@@ -12,7 +12,7 @@ Installation
 
 [Install via Composer](https://getcomposer.org/):
 
-```
+```JSON
 {
 	"require": {
         "maniaplanet/manialib-xml": "0.2.*@dev"
@@ -40,7 +40,7 @@ Architecture
 Examples
 -----------------------------
 
-```
+```PHP
 <?php
 
 use ManiaLib\XML\Node;
@@ -72,7 +72,7 @@ echo $renderer->getXML();
 ```
 
 It will output:
-```
+```XML
 <rootElement rootAttrivute="1.0">
     <someElement someAttribute="foo" otherAttribute="bar">
         Hello world
