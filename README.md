@@ -15,7 +15,7 @@ Installation
 ```
 {
 	"require": {
-        "maniaplanet/manialib-xml": "dev-event-dispatcher"
+        "maniaplanet/manialib-xml": "~0.2"
     }
 }
 ```
