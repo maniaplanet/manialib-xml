@@ -1,7 +1,6 @@
 <?php
 
 use ManiaLib\XML\Node;
-use ManiaLib\XML\Rendering\Renderer;
 
 require_once '../vendor/autoload.php';
 
@@ -22,10 +21,7 @@ Node::create()
 $node = Node::create()->setNodeName('anotherOne');
 $root->appendChild($node);
 
-// Let's render the tree
-$renderer = new Renderer();
-$renderer->setRoot($root);
-echo $renderer->getXML();
+return $root;
 
 // It will output
 //<rootElement rootAttrivute="1.0"><someElement someAttribute="foo" otherAttribute="bar">Hello world</someElement><anotherOne/></rootElement>
