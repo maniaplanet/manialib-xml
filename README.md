@@ -4,6 +4,7 @@ ManiaLib\XML
 [![Latest Stable Version](https://poser.pugx.org/maniaplanet/manialib-xml/v/stable.png)](https://packagist.org/packages/maniaplanet/manialib-xml)
 [![Latest Unstable Version](https://poser.pugx.org/maniaplanet/manialib-xml/v/unstable.svg)](https://packagist.org/packages/maniaplanet/manialib-xml)
 [![Total Downloads](https://poser.pugx.org/maniaplanet/manialib-xml/downloads.png)](https://packagist.org/packages/maniaplanet/manialib-xml)
+[![Build](https://travis-ci.org/maniaplanet/manialib-xml.svg?branch=functional-test)](https://travis-ci.org/#!/maniaplanet/manialib-xml)
 
 ManiaLib\XML is an object-oriented PHP library for writing XML.
 
@@ -25,14 +26,14 @@ Features
  * Simple and flexible object-oriented architecture
  * Configurable rendering drivers
  * Symfony\Component\EventDispatcher integration
- 
+
 Architecture
 -----------------------------
 
  * You construct a tree of `ManiaLib\XML\Node`.
  * Setter methods return the element for chaining (eg. `$node->setNodeName('foo')->setNodeValue('bar');`.
  * `ManiaLib\XML\Node::create()` instanciates the object and returns it for easy chaining (eg. `Node::create()->setNodeName('foo');`).
- * If you're running PHP 5.4+ you can use class member access on instantiation instead eg. 
+ * If you're running PHP 5.4+ you can use class member access on instantiation instead eg.
 `(new Node)->setNodeName('foo');`.
  * See `ManiaLib\XML\NodeInterface` for reference.
  * You then pass the root `Node` to an instance of `ManiaLib\XML\Rendering\Renderer`.
@@ -87,6 +88,6 @@ Todo
 -----------------------------
  * XMLComment
  * PhpDoc
- 
+
 
 
