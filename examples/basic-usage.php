@@ -2,7 +2,7 @@
 
 use ManiaLib\XML\Node;
 
-require_once '../vendor/autoload.php';
+require_once __DIR__.'/../vendor/autoload.php';
 
 // Let's build a Node tree. Here is the root element.
 $root = Node::create()

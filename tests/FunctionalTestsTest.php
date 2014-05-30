@@ -1,12 +1,10 @@
 <?php
-require_once __DIR__.'/../vendor/autoload.php';
-
 use ManiaLib\XML\NodeInterface;
 use ManiaLib\XML\Rendering\DriverInterface;
 use ManiaLib\XML\Rendering\Renderer;
 use Symfony\Component\Finder\Finder;
 
-class FunctionalTests extends PHPUnit_Framework_TestCase
+class FunctionalTestsTest extends PHPUnit_Framework_TestCase
 {
 
 	protected $examplesPath;
