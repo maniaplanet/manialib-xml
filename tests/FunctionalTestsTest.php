@@ -7,8 +7,6 @@ use Symfony\Component\Finder\Finder;
 class FunctionalTestsTest extends PHPUnit_Framework_TestCase
 {
 
-	protected $examplesPath;
-
 	/**
 	 * @var Renderer
 	 */
@@ -17,14 +15,14 @@ class FunctionalTestsTest extends PHPUnit_Framework_TestCase
 	protected function setUp()
 	{
 		$this->renderer = new Renderer();
-		if(!defined('PATH_TO_EXAMPLES'))
-		{
-			define('PATH_TO_EXAMPLES', '../examples/');
-		}
 	}
 
 	public function nodeAndResultsProvider()
 	{
+		if(!defined('PATH_TO_EXAMPLES'))
+		{
+			define('PATH_TO_EXAMPLES', '../examples/');
+		}
 		$examplesFinder = new Finder();
 		if(substr(PATH_TO_EXAMPLES, 0, 1) == '/')
 		{
@@ -35,6 +33,7 @@ class FunctionalTestsTest extends PHPUnit_Framework_TestCase
 			$examplesFinder->in(__DIR__.DIRECTORY_SEPARATOR.PATH_TO_EXAMPLES);
 		}
 		$examplesFinder->files()->name('*.php');
+
 		$driversFinder = new Finder();
 		$driversFinder->in(__DIR__.'/../src/ManiaLib/XML/Rendering/Drivers/')->files()->name('*.php');
 
@@ -45,7 +44,7 @@ class FunctionalTestsTest extends PHPUnit_Framework_TestCase
 			{
 				$node = require $file->getRealPath();
 				$expect = $file->getPath().'/'.$file->getBasename($file->getExtension()).'xml';
-				$classname = '\ManiaLib\XML\Rendering\Drivers\\'.$driverFile->getBasename('.php');
+				$classname = '\ManiaLib\XML\Rendering\Drivers\\'.$driverFile->getBasename('.'.$file->getExtension());
 				$driver = new $classname();
 				$tests[] = array($node, $driver, $expect);
 			}
