@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__.'/../vendor/autoload.php';
 
+use ManiaLib\XML\NodeInterface;
+use ManiaLib\XML\Rendering\DriverInterface;
+use ManiaLib\XML\Rendering\Renderer;
 use Symfony\Component\Finder\Finder;
 
 class FunctionalTests extends PHPUnit_Framework_TestCase
@@ -9,25 +12,45 @@ class FunctionalTests extends PHPUnit_Framework_TestCase
 	protected $examplesPath;
 
 	/**
-	 * @var \ManiaLib\XML\Rendering\Renderer
+	 * @var Renderer
 	 */
 	protected $renderer;
 
 	protected function setUp()
 	{
-		$this->renderer = new \ManiaLib\XML\Rendering\Renderer();
+		$this->renderer = new Renderer();
+		if(!defined('PATH_TO_EXAMPLES'))
+		{
+			define('PATH_TO_EXAMPLES', '../examples/');
+		}
 	}
 
 	public function nodeAndResultsProvider()
 	{
-		$finder = new Finder();
-		$finder->in(__DIR__.'/../examples/')->files()->name('*.php');
-		$tests = array();
-		foreach($finder as $file)
+		$examplesFinder = new Finder();
+		if(substr(PATH_TO_EXAMPLES, 0, 1) == '/')
 		{
-			$node = require $file->getRealPath();
-			$expect = $file->getPath().'/'.$file->getBasename($file->getExtension()).'xml';
-			$tests[] = array($node, $expect);
+			$examplesFinder->in(PATH_TO_EXAMPLES);
+		}
+		else
+		{
+			$examplesFinder->in(__DIR__.DIRECTORY_SEPARATOR.PATH_TO_EXAMPLES);
+		}
+		$examplesFinder->files()->name('*.php');
+		$driversFinder = new Finder();
+		$driversFinder->in(__DIR__.'/../src/ManiaLib/XML/Rendering/Drivers/')->files()->name('*.php');
+
+		$tests = array();
+		foreach($examplesFinder as $file)
+		{
+			foreach($driversFinder as $driverFile)
+			{
+				$node = require $file->getRealPath();
+				$expect = $file->getPath().'/'.$file->getBasename($file->getExtension()).'xml';
+				$classname = '\ManiaLib\XML\Rendering\Drivers\\'.$driverFile->getBasename('.php');
+				$driver = new $classname();
+				$tests[] = array($node, $driver, $expect);
+			}
 		}
 
 		return $tests;
@@ -36,21 +59,10 @@ class FunctionalTests extends PHPUnit_Framework_TestCase
 	/**
 	 * @dataProvider nodeAndResultsProvider
 	 */
-	public function testBasicUsageDOMDocumentDriver(ManiaLib\XML\NodeInterface $node, $expectedResult)
+	public function testRendering(NodeInterface $node, DriverInterface $driver, $expectedResult)
 	{
 		$this->renderer->setRoot($node);
-		$this->assertXmlStringEqualsXmlFile($expectedResult, $this->renderer->getXML());
-	}
-
-	/**
-	 * @dataProvider nodeAndResultsProvider
-	 */
-	public function testBasicUsageXMLWriterDriver(ManiaLib\XML\NodeInterface $node, $expectedResult)
-	{
-		$driver = new \ManiaLib\XML\Rendering\Drivers\XMLWriterDriver();
 		$driver->setEventDispatcher($this->renderer->getEventDispatcher());
-		
-		$this->renderer->setRoot($node);
 		$this->renderer->setDriver($driver);
 		$this->assertXmlStringEqualsXmlFile($expectedResult, $this->renderer->getXML());
 	}
