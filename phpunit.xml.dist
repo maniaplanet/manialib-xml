@@ -44,6 +44,6 @@ and open the template in the editor.
 		<log type="testdox-text" target="reports/testdox.txt"/>
 	</logging>-->
 	<php>
-		<const name="PATH_TO_EXAMPLES" value="../examples/"/>
+		<const name="PATH_TO_EXAMPLES" value="../../examples/"/>
 	</php>
 </phpunit>

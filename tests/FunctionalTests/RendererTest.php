@@ -1,10 +1,13 @@
 <?php
+namespace FunctionalTests;
+
 use ManiaLib\XML\NodeInterface;
 use ManiaLib\XML\Rendering\DriverInterface;
 use ManiaLib\XML\Rendering\Renderer;
+use PHPUnit_Framework_TestCase;
 use Symfony\Component\Finder\Finder;
 
-class FunctionalTestsTest extends PHPUnit_Framework_TestCase
+class RendererTest extends PHPUnit_Framework_TestCase
 {
 
 	/**
@@ -17,11 +20,11 @@ class FunctionalTestsTest extends PHPUnit_Framework_TestCase
 		$this->renderer = new Renderer();
 	}
 
-	public function nodeAndResultsProvider()
+	public function nodeAndDriverProvider()
 	{
 		if(!defined('PATH_TO_EXAMPLES'))
 		{
-			define('PATH_TO_EXAMPLES', '../examples/');
+			define('PATH_TO_EXAMPLES', '../../examples/');
 		}
 		$examplesFinder = new Finder();
 		if(substr(PATH_TO_EXAMPLES, 0, 1) == '/')
@@ -35,7 +38,7 @@ class FunctionalTestsTest extends PHPUnit_Framework_TestCase
 		$examplesFinder->files()->name('*.php');
 
 		$driversFinder = new Finder();
-		$driversFinder->in(__DIR__.'/../src/ManiaLib/XML/Rendering/Drivers/')->files()->name('*.php');
+		$driversFinder->in(__DIR__.'/../../src/ManiaLib/XML/Rendering/Drivers/')->files()->name('*.php');
 
 		$tests = array();
 		foreach($examplesFinder as $file)
@@ -54,7 +57,7 @@ class FunctionalTestsTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * @dataProvider nodeAndResultsProvider
+	 * @dataProvider nodeAndDriverProvider
 	 */
 	public function testRendering(NodeInterface $node, DriverInterface $driver, $expectedResult)
 	{
