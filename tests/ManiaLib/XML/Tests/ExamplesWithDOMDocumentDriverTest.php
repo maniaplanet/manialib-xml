@@ -2,46 +2,14 @@
 
 namespace ManiaLib\XML\Tests;
 
-
-use ManiaLib\XML\NodeInterface;
-use ManiaLib\XML\Rendering\DriverInterface;
 use ManiaLib\XML\Rendering\Drivers\DOMDocumentDriver;
-use ManiaLib\XML\Rendering\Renderer;
-use PHPUnit_Framework_TestCase;
 
-class ExamplesWithDOMDocumentDriverTest extends PHPUnit_Framework_TestCase
+class ExamplesWithDOMDocumentDriverTest extends AbstractExamplesText
 {
 
-	/**
-	 * @var Renderer
-	 */
-	protected $renderer;
-
-	/**
-	 * @var DriverInterface
-	 */
-	protected $driver;
-
-	protected function setUp()
+	protected function getDriver()
 	{
-		$this->renderer = new Renderer();
-		$this->driver = new DOMDocumentDriver();
-		$this->driver->setEventDispatcher($this->renderer->getEventDispatcher());
-	}
-
-	public function getNodes()
-	{
-		return new ExamplesIterator();
-	}
-
-	/**
-	 * @dataProvider getNodes
-	 */
-	public function testExamples(NodeInterface $node, $expectedResult)
-	{
-		$this->renderer->setRoot($node);
-		$this->renderer->setDriver($this->driver);
-		$this->assertXmlStringEqualsXmlFile($expectedResult, $this->renderer->getXML());
+		return new DOMDocumentDriver();
 	}
 
 }
