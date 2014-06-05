@@ -14,7 +14,8 @@ class ExamplesIterator implements Iterator
 
 	public function __construct()
 	{
-		$examplesPath = array(__DIR__.'/../../../../examples/');
+		$config = new Config();
+		$examplesPath = $config->getExamplePaths();
 		$examplesFinder = new Finder();
 		foreach($examplesPath as $path)
 		{
