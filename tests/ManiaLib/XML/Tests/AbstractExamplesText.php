@@ -4,7 +4,6 @@ namespace ManiaLib\XML\Tests;
 
 use ManiaLib\XML\NodeInterface;
 use ManiaLib\XML\Rendering\DriverInterface;
-use ManiaLib\XML\Rendering\Drivers\DOMDocumentDriver;
 use ManiaLib\XML\Rendering\Renderer;
 use PHPUnit_Framework_TestCase;
 
@@ -25,6 +24,7 @@ abstract class AbstractExamplesText extends PHPUnit_Framework_TestCase
 		$this->renderer = new Renderer();
 		$this->driver = $this->getDriver();
 		$this->driver->setEventDispatcher($this->renderer->getEventDispatcher());
+		$this->renderer->setDriver($this->driver);
 	}
 
 	public function getNodes()
@@ -38,7 +38,6 @@ abstract class AbstractExamplesText extends PHPUnit_Framework_TestCase
 	public function testExamples(NodeInterface $node, $expectedResult)
 	{
 		$this->renderer->setRoot($node);
-		$this->renderer->setDriver($this->driver);
 		$this->assertXmlStringEqualsXmlFile($expectedResult, $this->renderer->getXML());
 	}
 
