@@ -35,7 +35,7 @@ abstract class AbstractExamplesText extends PHPUnit_Framework_TestCase
 	/**
 	 * @dataProvider getNodes
 	 */
-	public function testExamples(NodeInterface $node, $expectedResult)
+	public function testExample(NodeInterface $node, $expectedResult)
 	{
 		$this->renderer->setRoot($node);
 		$this->assertXmlStringEqualsXmlFile($expectedResult, $this->renderer->getXML());
