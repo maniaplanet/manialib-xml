@@ -12,12 +12,14 @@ class ExamplesIterator implements Iterator
 	protected $currentIndex = null;
 	protected $keys = array();
 
-	public function __construct()
+	public function __construct(array $examplesPaths = array())
 	{
-		$config = new Config();
-		$examplesPath = $config->getExamplePaths();
+		if(!$examplesPaths)
+		{
+			$examplesPaths[] = __DIR__.'/../../../../examples/';
+		}
 		$examplesFinder = new Finder();
-		foreach($examplesPath as $path)
+		foreach($examplesPaths as $path)
 		{
 			if(is_dir($path))
 			{
