@@ -7,24 +7,17 @@ use ManiaLib\XML\Rendering\DriverInterface;
 use ManiaLib\XML\Rendering\Renderer;
 use PHPUnit_Framework_TestCase;
 
-abstract class AbstractExamplesText extends PHPUnit_Framework_TestCase
+class ExamplesTest extends PHPUnit_Framework_TestCase
 {
+
 	/**
 	 * @var Renderer
 	 */
 	protected $renderer;
 
-	/**
-	 * @var DriverInterface
-	 */
-	protected $driver;
-
 	protected function setUp()
 	{
 		$this->renderer = new Renderer();
-		$this->driver = $this->getDriver();
-		$this->driver->setEventDispatcher($this->renderer->getEventDispatcher());
-		$this->renderer->setDriver($this->driver);
 	}
 
 	public function getNodes()
@@ -35,11 +28,12 @@ abstract class AbstractExamplesText extends PHPUnit_Framework_TestCase
 	/**
 	 * @dataProvider getNodes
 	 */
-	public function testExample(NodeInterface $node, $expectedResult)
+	public function testExample(DriverInterface $driver, NodeInterface $node, $expectedResult)
 	{
 		$this->renderer->setRoot($node);
+		$driver->setEventDispatcher($this->renderer->getEventDispatcher());
+		$this->renderer->setDriver($driver);
 		$this->assertXmlStringEqualsXmlFile($expectedResult, $this->renderer->getXML());
 	}
 
-	protected abstract function getDriver();
 }
