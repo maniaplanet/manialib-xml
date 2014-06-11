@@ -30,7 +30,7 @@ class ExamplesTest extends PHPUnit_Framework_TestCase
         {
             foreach($driverIterator as $driver)
             {
-                $tests[$name.'|'.$driver] = array_merge(array(new $driver()), $example);
+                $tests[$name.' & '.$driver] = array_merge(array(new $driver()), $example);
             }
         }
         return $tests;

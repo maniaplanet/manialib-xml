@@ -36,7 +36,7 @@ class ExampleIterator implements Iterator
                 continue;
             }
             $node = require $file->getRealPath();
-                $this->tests[$file->getBasename($file->getExtension())] = array($node, $expect);
+                $this->tests[$file->getBasename('.'.$file->getExtension())] = array($node, $expect);
         }
         $this->currentIndex = 0;
         $this->keys = array_keys($this->tests);
