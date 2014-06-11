@@ -22,7 +22,7 @@ class ExamplesTest extends PHPUnit_Framework_TestCase
 
 	public function getNodes()
 	{
-		return new ExamplesIterator();
+		return new ExampleIterator();
 	}
 
 	/**

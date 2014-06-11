@@ -5,7 +5,7 @@ namespace ManiaLib\XML\Tests;
 use Iterator;
 use Symfony\Component\Finder\Finder;
 
-class ExamplesIterator implements Iterator
+class ExampleIterator implements Iterator
 {
 
 	protected $tests = array();
