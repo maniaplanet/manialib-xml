@@ -22,7 +22,18 @@ class ExamplesTest extends PHPUnit_Framework_TestCase
 
     public function getNodes()
     {
-        return new ExampleIterator();
+        $exampleIterator = new ExampleIterator();
+        $driverIterator = new DriverIterator();
+
+        $tests = array();
+        foreach($exampleIterator as $name => $example)
+        {
+            foreach($driverIterator as $driver)
+            {
+                $tests[$name.'|'.$driver] = array_merge(array(new $driver()), $example);
+            }
+        }
+        return $tests;
     }
 
     /**

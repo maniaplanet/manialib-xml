@@ -12,16 +12,11 @@ class ExampleIterator implements Iterator
     protected $currentIndex = null;
     protected $keys = array();
 
-    public function __construct(array $examplesPaths = array(), array $drivers = array())
+    public function __construct(array $examplesPaths = array())
     {
         if(!$examplesPaths)
         {
             $examplesPaths[] = __DIR__.'/../../../../examples/';
-        }
-        if(!$drivers)
-        {
-            $drivers[] = '\ManiaLib\XML\Rendering\Drivers\XMLWriterDriver';
-            $drivers[] = '\ManiaLib\XML\Rendering\Drivers\DOMDocumentDriver';
         }
         $examplesFinder = new Finder();
         foreach($examplesPaths as $path)
@@ -41,11 +36,7 @@ class ExampleIterator implements Iterator
                 continue;
             }
             $node = require $file->getRealPath();
-            foreach($drivers as $driver)
-            {
-                $this->tests[$file->getBasename($file->getExtension()).'|'.$driver] = array(new $driver(),
-                    $node, $expect);
-            }
+                $this->tests[$file->getBasename($file->getExtension())] = array($node, $expect);
         }
         $this->currentIndex = 0;
         $this->keys = array_keys($this->tests);
