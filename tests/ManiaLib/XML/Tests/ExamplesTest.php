@@ -20,10 +20,10 @@ class ExamplesTest extends PHPUnit_Framework_TestCase
         $this->renderer = new Renderer();
     }
 
-    public function getNodes()
+    public function examplesAndDriversProvider()
     {
         $tests = array();
-        foreach (new ExampleIterator () as $name => $examples) {
+        foreach (new ExamplesDirectoryIterator () as $name => $examples) {
             foreach (new DriverIterator () as $driver) {
                 $tests[$name . ' ' . get_class($driver)] = array_merge(array($driver), $examples);
             }
@@ -32,7 +32,7 @@ class ExamplesTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @dataProvider getNodes
+     * @dataProvider examplesAndDriversProvider
      */
     public function testExample(DriverInterface $driver, NodeInterface $node, $expectedResult)
     {
