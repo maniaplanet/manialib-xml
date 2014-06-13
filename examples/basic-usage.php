@@ -22,6 +22,3 @@ $node = Node::create()->setNodeName('anotherOne');
 $root->appendChild($node);
 
 return $root;
-
-// It will output
-//<rootElement rootAttrivute="1.0"><someElement someAttribute="foo" otherAttribute="bar">Hello world</someElement><anotherOne/></rootElement>

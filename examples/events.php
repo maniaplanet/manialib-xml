@@ -51,14 +51,5 @@ if(!class_exists('MyCustomNode'))
 
 }
 
-$root = new MyCustomNode();
+return new MyCustomNode();
 
-return $root;
-/*$renderer = new \ManiaLib\XML\Rendering\Renderer();
-$renderer->setRoot($root);
-
-header("Content-type: application/xml; charset=UTF8");
-echo $renderer->getXML();*/
-
-// This will output:
-// <MyCustomNode foo="bar" hello="world"/>
