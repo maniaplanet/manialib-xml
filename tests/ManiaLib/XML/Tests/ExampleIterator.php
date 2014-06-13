@@ -8,38 +8,33 @@ use Symfony\Component\Finder\Finder;
 class ExampleIterator implements Iterator
 {
 
-    protected $tests = array();
+    protected $tests        = array();
     protected $currentIndex = null;
-    protected $keys = array();
+    protected $keys         = array();
 
     public function __construct(array $examplesPaths = array())
     {
-        if(!$examplesPaths)
-        {
-            $examplesPaths[] = __DIR__.'/../../../../examples/';
+        if (!$examplesPaths) {
+            $examplesPaths[] = __DIR__ . '/../../../../examples/';
         }
         $examplesFinder = new Finder();
-        foreach($examplesPaths as $path)
-        {
-            if(is_dir($path))
-            {
+        foreach ($examplesPaths as $path) {
+            if (is_dir($path)) {
                 $examplesFinder->in($path);
             }
         }
         $examplesFinder->files()->name('*.php');
 
-        foreach($examplesFinder as $file)
-        {
+        foreach ($examplesFinder as $file) {
             $expect = str_ireplace('.php', '.xml', $file->getRealpath());
-            if(!file_exists($expect))
-            {
+            if (!file_exists($expect)) {
                 continue;
             }
-            $node = require $file->getRealPath();
-                $this->tests[$file->getBasename('.'.$file->getExtension())] = array($node, $expect);
+            $node                                                       = require $file->getRealPath();
+            $this->tests[$file->getBasename('.' . $file->getExtension())] = array($node, $expect);
         }
         $this->currentIndex = 0;
-        $this->keys = array_keys($this->tests);
+        $this->keys         = array_keys($this->tests);
     }
 
     public function current()

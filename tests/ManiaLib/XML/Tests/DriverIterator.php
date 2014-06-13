@@ -5,21 +5,20 @@ namespace ManiaLib\XML\Tests;
 class DriverIterator implements \Iterator
 {
 
-    protected $drivers = array();
+    protected $drivers      = array();
     protected $currentIndex = 0;
 
-    function __construct(array $drivers = array())
+    function __construct()
     {
-        if(!$drivers)
-        {
-            $this->drivers[] = '\ManiaLib\XML\Rendering\Drivers\XMLWriterDriver';
-            $this->drivers[] = '\ManiaLib\XML\Rendering\Drivers\DOMDocumentDriver';
-        }
+        $this->drivers = array(
+            new \ManiaLib\XML\Rendering\Drivers\XMLWriterDriver(),
+            new \ManiaLib\XML\Rendering\Drivers\DOMDocumentDriver(),
+        );
     }
 
     public function current()
     {
-        return new $this->drivers[$this->currentIndex]();
+        return $this->drivers[$this->currentIndex];
     }
 
     public function key()
