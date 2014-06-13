@@ -19,7 +19,7 @@ class DriverIterator implements \Iterator
 
     public function current()
     {
-        return $this->drivers[$this->currentIndex];
+        return new $this->drivers[$this->currentIndex]();
     }
 
     public function key()
