@@ -16,7 +16,7 @@ Installation
 ```JSON
 {
 	"require": {
-        "maniaplanet/manialib-xml": "0.3.*@dev"
+        "maniaplanet/manialib-xml": "0.2.*@dev"
     }
 }
 ```
