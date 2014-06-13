@@ -16,7 +16,7 @@ Installation
 ```JSON
 {
 	"require": {
-        "maniaplanet/manialib-xml": "0.2.*@dev"
+        "maniaplanet/manialib-xml": "0.3.*@dev"
     }
 }
 ```
@@ -84,10 +84,20 @@ It will output:
 
 More in /examples directory
 
+Tests
+-----------------------------
+
+A simple suite tests .php files in the /examples directory against their associated .xml renders. To run the tests we recommand:
+ * [PHPUnit system-wide installation via Composer](http://phpunit.de/manual/current/en/installation.html)
+ * Run `composer install`
+ * Run `phpunit`
+
 Todo
 -----------------------------
  * XMLComment
  * PhpDoc
+ * Raw node value
+ * Other unsupported Node features?
 
 
 
