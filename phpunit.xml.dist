@@ -10,6 +10,9 @@ and open the template in the editor.
 	bootstrap="tests/bootstrap.php"
 	colors="true"
 	verbose="true">
+	<php>
+		<const name="APP_ROOT" value="../"/>
+	</php>
 	<testsuites>
 		<testsuite name="LibXML Tests">
 			<directory suffix="Test.php">./tests</directory>

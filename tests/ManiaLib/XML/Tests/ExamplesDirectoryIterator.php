@@ -15,7 +15,7 @@ class ExamplesDirectoryIterator implements Iterator
     public function __construct(array $examplesPaths = array())
     {
         if (!$examplesPaths) {
-            $examplesPaths[] = __DIR__ . '/../../../../examples/';
+            $examplesPaths[] = __DIR__ . '/../../../'.APP_ROOT.'examples/';
         }
         $examplesFinder = new Finder();
         foreach ($examplesPaths as $path) {
